@@ -16,3 +16,17 @@ resources:
   limits:
     cpu: 200m
     memory: 128Mi
+
+
+appB:
+  replicaCount: 1
+  image:
+    repository: httpd
+    tag: "2.4"
+
+networkPolicy:
+  enabled: true
+  allowFromA: false
+
+testClients:
+  enabled: true
