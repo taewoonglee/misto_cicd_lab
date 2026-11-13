@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "argo-test.fullname" . }}-b
+  labels:
+    app: {{ include "argo-test.fullname" . }}-b
+spec:
+  replicas: {{ .Values.appB.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "argo-test.fullname" . }}-b
+  template:
+    metadata:
+      labels:
+        app: {{ include "argo-test.fullname" . }}-b
+    spec:
+      containers:
+          - name: httpd
+            image: "{{ .Values.appB.image.repository }}:{{ .Values.appB.image.tag }}"
+            imagePullPolicy: {{ .Values.image.pullPolicy }}
+            ports:
+              - name: http
+                containerPort: 80
+            resources:
+              {{- toYaml .Values.resources | nindent 12 }}

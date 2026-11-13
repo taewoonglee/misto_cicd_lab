@@ -1,0 +1,22 @@
+{{- if .Values.networkPolicy.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: {{ include "argo-test.fullname" . }}-b-ingress
+spec:
+  podSelector:
+    matchLabels:
+      app: {{ include "argo-test.fullname" . }}-b
+  policyTypes:
+    - Ingress
+  {{- if .Values.networkPolicy.allowFromA }}
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              {{- include "argo-test.selectorLabels" . | nindent 14 }}
+      ports:
+        - protocol: TCP
+          port: 80
+  {{- end }}
+{{- end }}
